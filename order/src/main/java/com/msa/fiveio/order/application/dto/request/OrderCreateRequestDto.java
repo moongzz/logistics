@@ -1,4 +1,4 @@
-package com.msa.fiveio.order.presentation.dto.request;
+package com.msa.fiveio.order.application.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.msa.fiveio.order.model.entity.Order;

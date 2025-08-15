@@ -3,7 +3,7 @@ package com.msa.fiveio.order.infrastructure.repository;
 import com.msa.fiveio.common.config.QueryDslConfig;
 import com.msa.fiveio.order.model.entity.Order;
 import com.msa.fiveio.order.model.entity.QOrder;
-import com.msa.fiveio.order.presentation.dto.request.OrderSearchRequestDto;
+import com.msa.fiveio.order.application.dto.request.OrderSearchRequestDto;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.Wildcard;

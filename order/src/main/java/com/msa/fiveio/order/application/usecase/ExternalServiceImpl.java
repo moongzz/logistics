@@ -6,7 +6,7 @@ import com.msa.fiveio.order.infrastructure.client.DeliveryClient;
 import com.msa.fiveio.order.infrastructure.client.ProductClient;
 import com.msa.fiveio.order.infrastructure.client.dto.request.DeliveryCreateRequestDto;
 import com.msa.fiveio.order.infrastructure.client.dto.response.ProductResponseDto;
-import com.msa.fiveio.order.presentation.dto.request.OrderCreateRequestDto;
+import com.msa.fiveio.order.application.dto.request.OrderCreateRequestDto;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

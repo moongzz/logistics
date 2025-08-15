@@ -2,9 +2,9 @@ package com.msa.fiveio.order.application.usecase;
 
 import com.msa.fiveio.order.infrastructure.client.dto.response.ProductResponseDto;
 import com.msa.fiveio.order.model.entity.Order;
-import com.msa.fiveio.order.presentation.dto.request.OrderSearchRequestDto;
-import com.msa.fiveio.order.presentation.dto.request.OrderUpdateRequestDto;
-import com.msa.fiveio.order.presentation.dto.response.OrderResponseDto;
+import com.msa.fiveio.order.application.dto.request.OrderSearchRequestDto;
+import com.msa.fiveio.order.application.dto.request.OrderUpdateRequestDto;
+import com.msa.fiveio.order.application.dto.response.OrderResponseDto;
 import java.util.UUID;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

@@ -1,7 +1,7 @@
 package com.msa.fiveio.order.application.usecase;
 
 import com.msa.fiveio.order.infrastructure.client.dto.response.ProductResponseDto;
-import com.msa.fiveio.order.presentation.dto.request.OrderCreateRequestDto;
+import com.msa.fiveio.order.application.dto.request.OrderCreateRequestDto;
 import java.util.UUID;
 
 public interface ExternalService {

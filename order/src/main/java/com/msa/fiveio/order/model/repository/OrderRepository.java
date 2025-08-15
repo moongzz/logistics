@@ -1,7 +1,7 @@
 package com.msa.fiveio.order.model.repository;
 
 import com.msa.fiveio.order.model.entity.Order;
-import com.msa.fiveio.order.presentation.dto.request.OrderSearchRequestDto;
+import com.msa.fiveio.order.application.dto.request.OrderSearchRequestDto;
 import java.util.Optional;
 import java.util.UUID;
 import org.springframework.data.domain.Page;

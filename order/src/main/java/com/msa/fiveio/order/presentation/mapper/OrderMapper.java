@@ -1,8 +1,8 @@
 package com.msa.fiveio.order.presentation.mapper;
 
 import com.msa.fiveio.order.model.entity.Order;
-import com.msa.fiveio.order.presentation.dto.response.OrderCreateResponseDto;
-import com.msa.fiveio.order.presentation.dto.response.OrderResponseDto;
+import com.msa.fiveio.order.application.dto.response.OrderCreateResponseDto;
+import com.msa.fiveio.order.application.dto.response.OrderResponseDto;
 
 public class OrderMapper {
 
