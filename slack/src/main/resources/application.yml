@@ -67,13 +67,6 @@ management:
           - prometheus  #resilience4j 시각화
           - busrefresh  # /bus/refresh 엔드포인트 활성화
 
-  zipkin:
-    tracing:
-      endpoint: "http://localhost:9411/api/v2/spans"
-  tracing:
-    sampling:
-      probability: 1.0
-
 eureka:
   client:
     service-url:

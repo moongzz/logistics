@@ -65,13 +65,6 @@ management:
           - prometheus  #resilience4j 시각화
           - busrefresh  # /bus/refresh 엔드포인트 활성화
 
-  zipkin:
-    tracing:
-      endpoint: "http://localhost:9411/api/v2/spans"
-  tracing:
-    sampling:
-      probability: 1.0
-
   resilience4j:
     circuitbreaker:
       enabled: true  # Feign 또는 기타 서비스에서 Circuit Breaker 활성화 여부

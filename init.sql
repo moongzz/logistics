@@ -6,3 +6,4 @@ CREATE DATABASE slack;
 CREATE DATABASE aiinterlock;
 CREATE DATABASE users;
 CREATE DATABASE products;
+CREATE DATABASE promotions;
