@@ -4,8 +4,6 @@ server:
 spring:
   application:
     name: gateway
-  profiles:
-    active: local
   main:
     allow-bean-definition-overriding: true
     web-application-type: reactive
@@ -161,29 +159,10 @@ springdoc:
     urls[7]:
       name: Product Service
       url: /product-service/v3/api-docs
+    urls[8]:
+      name: Promotion Service
+      url: /promotion-service/v3/api-docs
 
-
-
-  zipkin:
-    tracing:
-      endpoint: "http://localhost:9411/api/v2/spans"
-  tracing:
-    sampling:
-      probability: 1.0
-
-  rabbitmq:
-    host: localhost
-    port: 5672
-    username: guest
-    password: guest
-    main:
-      allow-bean-definition-overriding: true
-    data:
-      redis:
-        host: localhost
-        port: 6379
-        username: default
-        password: systempass
 
   resilience4j:
     circuitbreaker:
