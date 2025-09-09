@@ -10,7 +10,9 @@ import com.msa.fiveio.order.application.dto.request.OrderUpdateRequestDto;
 import com.msa.fiveio.order.application.dto.response.OrderCreateResponseDto;
 import com.msa.fiveio.order.application.dto.response.OrderResponseDto;
 import com.msa.fiveio.order.presentation.mapper.OrderMapper;
+
 import java.util.UUID;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -26,11 +28,11 @@ public class OrderFacadeImpl implements OrdersFacade {
 
     @Override
     public OrderCreateResponseDto createOrder(OrderCreateRequestDto orderCreateRequestDto) {
-        ProductResponseDto productResponseDto = requestProduct(orderCreateRequestDto);
+        ProductResponseDto productResponseDto = externalService.sendProductRequest(orderCreateRequestDto);
         Order order = orderCreateRequestDto.createOrder(productResponseDto.getRequesterCompanyId());
         Order savedOrder = orderService.createOrder(productResponseDto, order);
 
-        requestDelivery(savedOrder.getOrderId(), productResponseDto, orderCreateRequestDto);
+        externalService.sendDeliveryRequest(savedOrder.getOrderId(), productResponseDto, orderCreateRequestDto);
         return OrderMapper.orderIdToOrderCreateResponseDto(savedOrder);
     }
 
@@ -70,15 +72,4 @@ public class OrderFacadeImpl implements OrdersFacade {
         orderService.deleteOrder(order, userId, status);
     }
 
-    private void requestDelivery(
-        UUID orderId,
-        ProductResponseDto productResponseDto,
-        OrderCreateRequestDto orderCreateRequestDto
-    ) {
-        externalService.sendDeliveryRequest(orderId, productResponseDto, orderCreateRequestDto);
-    }
-
-    private ProductResponseDto requestProduct(OrderCreateRequestDto orderCreateRequestDto) {
-        return externalService.sendProductRequest(orderCreateRequestDto);
-    }
 }

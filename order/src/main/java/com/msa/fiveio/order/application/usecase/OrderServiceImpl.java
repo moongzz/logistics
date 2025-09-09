@@ -9,7 +9,9 @@ import com.msa.fiveio.order.application.dto.request.OrderUpdateRequestDto;
 import com.msa.fiveio.order.application.dto.response.OrderResponseDto;
 import com.msa.fiveio.order.presentation.mapper.OrderMapper;
 import com.msa.fiveio.order.model.entity.Order;
+
 import java.util.UUID;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -21,7 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Slf4j
 @Transactional(
-    readOnly = true
+        readOnly = true
 )
 public class OrderServiceImpl implements OrderService {
 
@@ -31,9 +33,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Order createOrder(ProductResponseDto productInfo, Order order) {
         order.calculateTotalAmount(productInfo.getProductPrice());
-        Order savedOrder = orderRepository.save(order);
-        log.info("Order created: {}", savedOrder.getOrderId());
-        return savedOrder;
+        return orderRepository.save(order);
     }
 
     @Override
@@ -51,7 +51,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Order getOrder(UUID orderId) {
         return orderRepository.findById(orderId)
-            .orElseThrow(() -> new RuntimeException("Order not found"));
+                .orElseThrow(() -> new RuntimeException("Order not found"));
     }
 
     @Override
