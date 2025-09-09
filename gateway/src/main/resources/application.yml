@@ -116,7 +116,17 @@ spring:
             - RemoveRequestHeader=Cookie
             - RewritePath=/product-service/api/(?<segment>.*), /api/$\{segment}
 
-
+        - id: promotion-service
+          uri: lb://promotion-service
+          predicates:
+            - Path=/api/promotions/**
+        - id: order-docs
+          uri: lb://promotion-service
+          predicates:
+            - Path=/promotion-service/**
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/promotion-service/api/promotions/(?<segment>.*), /api/promotions/$\{segment}
 
       discovery:
         locator:
