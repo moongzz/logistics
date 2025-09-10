@@ -1,4 +1,4 @@
-package com.msa.fiveio.promotion.presentation.persistence;
+package com.msa.fiveio.promotion.infrastructure.persistence;
 
 import com.msa.fiveio.promotion.model.entity.Promotion;
 import com.msa.fiveio.promotion.model.repository.PromotionRepository;
