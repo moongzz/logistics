@@ -45,8 +45,6 @@ subprojects {
 		compileOnly group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.5'
 		runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.5'
 		runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.5'
-		//redis
-		implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 		//feignClient
 		implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
 		//rabbitMQ Bus
@@ -60,11 +58,6 @@ subprojects {
 		//resilience4j dashboard
 		implementation 'io.github.resilience4j:resilience4j-micrometer'
 		implementation 'io.micrometer:micrometer-registry-prometheus'
-
-		//분산추적 micrometer와 zipkin
-		implementation 'io.micrometer:micrometer-tracing-bridge-brave'
-		implementation 'io.github.openfeign:feign-micrometer'
-		implementation 'io.zipkin.reporter2:zipkin-reporter-brave'
 
 		implementation 'org.springframework.boot:spring-boot-starter'
 		implementation 'org.springframework.boot:spring-boot-starter-actuator'
