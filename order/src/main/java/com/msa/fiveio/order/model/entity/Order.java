@@ -3,11 +3,13 @@ package com.msa.fiveio.order.model.entity;
 import com.msa.fiveio.common.auditing.BaseEntity;
 import com.msa.fiveio.common.exception.CustomException;
 import com.msa.fiveio.common.exception.domain.OrderErrorCode;
+import com.msa.fiveio.order.infrastructure.client.dto.response.PromotionDto;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 
 import java.util.UUID;
+
 import lombok.NoArgsConstructor;
 
 @Getter
@@ -37,37 +39,38 @@ public class Order extends BaseEntity {
     private String requestNotes;
 
     @Column(
-        name = "total_amount",
-        nullable = false,
-        columnDefinition = "DOUBLE PRECISION DEFAULT 0.0 NOT NULL"
+            name = "total_amount",
+            nullable = false,
+            columnDefinition = "DOUBLE PRECISION DEFAULT 0.0 NOT NULL"
     )
     private Double totalAmount;
 
     @Builder
     private Order(UUID requesterCompanyId, UUID receiverCompanyId, UUID productId,
-        Double totalAmount, Long quantity, String requestNotes) {
+                  Double totalAmount, Long quantity, String requestNotes) {
         this.requesterCompanyId = requesterCompanyId;
         this.receiverCompanyId = receiverCompanyId;
         this.productId = productId;
         this.quantity = quantity;
         this.requestNotes = requestNotes;
-        this.totalAmount = totalAmount;
+        this.totalAmount = totalAmount != null ? totalAmount : 0.0;
+        ;
     }
 
     public static Order createOrder(
-        UUID requesterCompanyId,
-        UUID receiverCompanyId,
-        UUID productId,
-        Long quantity,
-        String requestNotes
+            UUID requesterCompanyId,
+            UUID receiverCompanyId,
+            UUID productId,
+            Long quantity,
+            String requestNotes
     ) {
         return Order.builder()
-            .requesterCompanyId(requesterCompanyId)
-            .receiverCompanyId(receiverCompanyId)
-            .productId(productId)
-            .quantity(quantity)
-            .requestNotes(requestNotes)
-            .build();
+                .requesterCompanyId(requesterCompanyId)
+                .receiverCompanyId(receiverCompanyId)
+                .productId(productId)
+                .quantity(quantity)
+                .requestNotes(requestNotes)
+                .build();
     }
 
     public void calculateTotalAmount(Double productPrice) {
@@ -83,6 +86,18 @@ public class Order extends BaseEntity {
         }
         if (requestNotes != null) {
             this.requestNotes = requestNotes;
+        }
+    }
+
+    public void applyPromotion(PromotionDto promotion) {
+        if (promotion == null) return;
+
+        switch (promotion.getDiscountType()) {
+            case PERCENT ->
+                    this.totalAmount = this.totalAmount * (100 - promotion.getDiscountValue().doubleValue()) / 100;
+            case AMOUNT ->
+                    this.totalAmount = Math.max(0, this.totalAmount - promotion.getDiscountValue().doubleValue());
+            default -> throw new IllegalArgumentException("알 수 없는 할인 타입:" + promotion.getDiscountType());
         }
     }
 
