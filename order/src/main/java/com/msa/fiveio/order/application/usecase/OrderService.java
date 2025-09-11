@@ -1,6 +1,7 @@
 package com.msa.fiveio.order.application.usecase;
 
 import com.msa.fiveio.order.infrastructure.client.dto.response.ProductResponseDto;
+import com.msa.fiveio.order.infrastructure.client.dto.response.PromotionDto;
 import com.msa.fiveio.order.model.entity.Order;
 import com.msa.fiveio.order.application.dto.request.OrderSearchRequestDto;
 import com.msa.fiveio.order.application.dto.request.OrderUpdateRequestDto;
@@ -22,4 +23,6 @@ public interface OrderService {
     void cancelOrder(Order order, Long userId, String status);
 
     void deleteOrder(Order order, Long userId, String status);
+
+    void applyPromotion(Order order, PromotionDto promotion);
 }

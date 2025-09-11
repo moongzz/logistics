@@ -4,10 +4,13 @@ import com.msa.fiveio.common.exception.CustomException;
 import com.msa.fiveio.common.exception.domain.OrderErrorCode;
 import com.msa.fiveio.order.infrastructure.client.DeliveryClient;
 import com.msa.fiveio.order.infrastructure.client.ProductClient;
+import com.msa.fiveio.order.infrastructure.client.PromotionClient;
 import com.msa.fiveio.order.infrastructure.client.dto.request.DeliveryCreateRequestDto;
 import com.msa.fiveio.order.infrastructure.client.dto.response.ProductResponseDto;
 import com.msa.fiveio.order.application.dto.request.OrderCreateRequestDto;
 import java.util.UUID;
+
+import com.msa.fiveio.order.infrastructure.client.dto.response.PromotionDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -19,6 +22,7 @@ public class ExternalServiceImpl implements ExternalService {
 
     private final DeliveryClient deliveryClient;
     private final ProductClient productClient;
+    private final PromotionClient promotionClient;
 
     @Override
     public void sendDeliveryRequest(UUID orderId, ProductResponseDto productInfo,
@@ -66,6 +70,15 @@ public class ExternalServiceImpl implements ExternalService {
             deliveryClient.cancelDelivery(orderId, userId);
         } catch (Exception e) {
             throw new CustomException(OrderErrorCode.DELIVERY_DELETE_FAILED);
+        }
+    }
+
+    @Override
+    public PromotionDto getPromotion(UUID productId) {
+        try {
+            return promotionClient.getByProductId(productId);
+        } catch (Exception e) {
+            return null;
         }
     }
 }

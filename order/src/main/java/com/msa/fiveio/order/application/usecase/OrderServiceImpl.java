@@ -3,6 +3,7 @@ package com.msa.fiveio.order.application.usecase;
 import com.msa.fiveio.common.exception.CustomException;
 import com.msa.fiveio.common.exception.domain.OrderErrorCode;
 import com.msa.fiveio.order.infrastructure.client.dto.response.ProductResponseDto;
+import com.msa.fiveio.order.infrastructure.client.dto.response.PromotionDto;
 import com.msa.fiveio.order.model.repository.OrderRepository;
 import com.msa.fiveio.order.application.dto.request.OrderSearchRequestDto;
 import com.msa.fiveio.order.application.dto.request.OrderUpdateRequestDto;
@@ -67,6 +68,12 @@ public class OrderServiceImpl implements OrderService {
         validateOrderStatus(status, "DELIVERED");
         orderDelete(order, userId);
         log.info("Order {} deleted by user: {}", order.getOrderId(), userId);
+    }
+
+    @Transactional
+    @Override
+    public void applyPromotion(Order order, PromotionDto promotion) {
+        order.applyPromotion(promotion);
     }
 
     private void validateOrderStatus(String Status, String expectedStatus) {
