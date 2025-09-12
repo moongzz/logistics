@@ -3,7 +3,9 @@ package com.msa.fiveio.order.presentation.controller;
 import com.msa.fiveio.order.application.dto.request.OrderCreateRequestDto;
 import com.msa.fiveio.order.application.dto.response.OrderCreateResponseDto;
 import com.msa.fiveio.order.application.facade.OrdersFacade;
-import com.msa.fiveio.order.application.usecase.ExternalService;
+import com.msa.fiveio.order.application.usecase.DeliveryService;
+import com.msa.fiveio.order.application.usecase.ProductService;
+import com.msa.fiveio.order.application.usecase.PromotionService;
 import com.msa.fiveio.order.infrastructure.client.dto.response.ProductResponseDto;
 import com.msa.fiveio.order.infrastructure.client.dto.response.PromotionDto;
 import com.msa.fiveio.order.model.entity.Order;
@@ -37,8 +39,14 @@ public class OrderControllerTest {
     @Autowired
     private OrderRepository orderRepository;
 
-    @MockBean // 실제 외부 서비스 호출은 모킹
-    private ExternalService externalService;
+    @MockBean
+    private DeliveryService deliveryService;
+
+    @MockBean
+    private ProductService productService;
+
+    @MockBean
+    private PromotionService promotionService;
 
     private OrderCreateRequestDto request;
     private ProductResponseDto product;
@@ -82,11 +90,11 @@ public class OrderControllerTest {
     @Test
     void createOrder_실제_DB에_주문이_저장된다() {
         // Given
-        when(externalService.sendProductRequest(any(OrderCreateRequestDto.class)))
+        when(productService.sendProductRequest(any(OrderCreateRequestDto.class)))
                 .thenReturn(product);
-        when(externalService.getPromotion(productId))
+        when(promotionService.getPromotion(productId))
                 .thenReturn(promotion);
-        doNothing().when(externalService)
+        doNothing().when(deliveryService)
                 .sendDeliveryRequest(any(UUID.class), any(ProductResponseDto.class), any(OrderCreateRequestDto.class));
 
         // When
@@ -106,19 +114,19 @@ public class OrderControllerTest {
         assertNotNull(order.getCreatedAt());
 
         // 외부 서비스 호출 검증
-        verify(externalService, times(1)).sendProductRequest(any(OrderCreateRequestDto.class));
-        verify(externalService, times(1)).getPromotion(productId);
-        verify(externalService, times(1)).sendDeliveryRequest(any(UUID.class), eq(product), any(OrderCreateRequestDto.class));
+        verify(productService, times(1)).sendProductRequest(any(OrderCreateRequestDto.class));
+        verify(promotionService, times(1)).getPromotion(productId);
+        verify(deliveryService, times(1)).sendDeliveryRequest(any(UUID.class), eq(product), any(OrderCreateRequestDto.class));
     }
 
     @Test
     void createOrder_프로모션_적용후_가격이_정상적으로_계산된다() {
         // Given
-        when(externalService.sendProductRequest(any(OrderCreateRequestDto.class)))
+        when(productService.sendProductRequest(any(OrderCreateRequestDto.class)))
                 .thenReturn(product);
-        when(externalService.getPromotion(productId))
+        when(promotionService.getPromotion(productId))
                 .thenReturn(promotion);
-        doNothing().when(externalService)
+        doNothing().when(deliveryService)
                 .sendDeliveryRequest(any(UUID.class), any(ProductResponseDto.class), any(OrderCreateRequestDto.class));
 
         // When

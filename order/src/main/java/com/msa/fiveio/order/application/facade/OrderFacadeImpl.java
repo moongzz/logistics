@@ -1,7 +1,9 @@
 package com.msa.fiveio.order.application.facade;
 
-import com.msa.fiveio.order.application.usecase.ExternalService;
+import com.msa.fiveio.order.application.usecase.DeliveryService;
 import com.msa.fiveio.order.application.usecase.OrderService;
+import com.msa.fiveio.order.application.usecase.ProductService;
+import com.msa.fiveio.order.application.usecase.PromotionService;
 import com.msa.fiveio.order.infrastructure.client.dto.response.ProductResponseDto;
 import com.msa.fiveio.order.infrastructure.client.dto.response.PromotionDto;
 import com.msa.fiveio.order.model.entity.Order;
@@ -25,18 +27,20 @@ import org.springframework.transaction.annotation.Transactional;
 public class OrderFacadeImpl implements OrdersFacade {
 
     private final OrderService orderService;
-    private final ExternalService externalService;
+    private final DeliveryService deliveryService;
+    private final ProductService productService;
+    private final PromotionService promotionService;
 
     @Override
     public OrderCreateResponseDto createOrder(OrderCreateRequestDto orderCreateRequestDto) {
-        ProductResponseDto productResponseDto = externalService.sendProductRequest(orderCreateRequestDto);
+        ProductResponseDto productResponseDto = productService.sendProductRequest(orderCreateRequestDto);
         Order order = orderCreateRequestDto.createOrder(productResponseDto.getRequesterCompanyId());
 
-        PromotionDto promotion = externalService.getPromotion(orderCreateRequestDto.getProductId());
+        PromotionDto promotion = promotionService.getPromotion(orderCreateRequestDto.getProductId());
         Order savedOrder = orderService.createOrder(productResponseDto, order);
         orderService.applyPromotion(order, promotion);
 
-        externalService.sendDeliveryRequest(savedOrder.getOrderId(), productResponseDto, orderCreateRequestDto);
+        deliveryService.sendDeliveryRequest(savedOrder.getOrderId(), productResponseDto, orderCreateRequestDto);
         return OrderMapper.orderIdToOrderCreateResponseDto(savedOrder);
     }
 
@@ -62,16 +66,16 @@ public class OrderFacadeImpl implements OrdersFacade {
     @Transactional
     @Override
     public void cancelOrder(UUID orderId, Long userId) {
-        String status = externalService.getDeliveryStatus(orderId);
+        String status = deliveryService.getDeliveryStatus(orderId);
         Order order = orderService.getOrder(orderId);
-        externalService.rollbackStock(order.getProductId(), order.getQuantity());
-        externalService.cancelDelivery(orderId, userId);
+        productService.rollbackStock(order.getProductId(), order.getQuantity());
+        deliveryService.cancelDelivery(orderId, userId);
         orderService.cancelOrder(order, userId, status);
     }
 
     @Override
     public void deleteOrder(UUID orderId, Long userId) {
-        String status = externalService.getDeliveryStatus(orderId);
+        String status = deliveryService.getDeliveryStatus(orderId);
         Order order = orderService.getOrder(orderId);
         orderService.deleteOrder(order, userId, status);
     }
